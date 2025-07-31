@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - default
+    
+networks:
+  default:
+    external:
+      name: shared-network

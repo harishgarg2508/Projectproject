@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      DATABASE_TYPE: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: harish
+      DATABASE_NAME: harish
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: harish@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: harish
+    ports:
+      - '8080:80'
+    restart: unless-stopped
+
+  backend:
+    build: ./
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    external:
+      name: shared-network
