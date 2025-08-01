@@ -6,6 +6,9 @@ import { AuthModule } from './auth/auth.module';
 import { HashingModule } from './hashing/hashing.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './config/datasource';
+import { BirdModule } from './bird/bird.module';
+import { SmallModule } from './small/small.module';
+import { LargeModule } from './large/large.module';
 
 @Module({
   imports: [
@@ -13,6 +16,9 @@ import { dataSourceOptions } from './config/datasource';
     AuthModule,
     HashingModule,
     TypeOrmModule.forRoot(dataSourceOptions),
+    BirdModule,
+    SmallModule,
+    LargeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

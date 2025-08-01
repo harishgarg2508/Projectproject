@@ -13,6 +13,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - shared-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -22,6 +24,8 @@ services:
     ports:
       - '8080:80'
     restart: unless-stopped
+    networks:
+      - shared-network
 
   backend:
     build: ./
@@ -31,11 +35,12 @@ services:
       - ./:/app
     depends_on:
       - postgres
+    networks:
+      - shared-network
 
 volumes:
   postgres_data:
 
 networks:
-  default:
-    external:
-      name: shared-network
+  shared-network:
+    external: true

@@ -6,11 +6,12 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   return (
     <>
-    <Button variant="contained" onClick={() => setOpen(true)}>
+    {/* <Button variant="contained" onClick={() => setOpen(true)}>
       Create Task
     </Button>
-    <CreateTaskModal open={open} onClose={() => setOpen(false)} />
+    <CreateTaskModal open={open} onClose={() => setOpen(false)} /> */}
 
+      hello
     </>
   );
 }

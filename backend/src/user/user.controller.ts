@@ -12,11 +12,6 @@ export class UserController {
     return this.userService.createUser();
   }
 
- 
-
-  
- 
-
   @Get(":id")
   getUserById(@Param('id') id: number) {
     return this.userService.findUserById(id);
