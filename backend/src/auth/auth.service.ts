@@ -48,6 +48,7 @@ export class AuthService {
     response.cookie('token', access_token, {
     
       secure: false,
+    
     });
     
     return {
