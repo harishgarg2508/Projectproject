@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { HashingModule } from './hashing/hashing.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './config/datasource';
+import { addTransactionalDataSource } from 'typeorm-transactional';
+import { DataSource } from 'typeorm';
 
 
 @Module({
@@ -13,8 +15,17 @@ import { dataSourceOptions } from './config/datasource';
     UserModule,
     AuthModule,
     HashingModule,
-    TypeOrmModule.forRoot(dataSourceOptions),
-  
+      TypeOrmModule.forRootAsync({
+      useFactory() {
+        return dataSourceOptions; 
+      },
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+        return addTransactionalDataSource(new DataSource(options));
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
