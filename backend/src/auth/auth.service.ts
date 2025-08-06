@@ -13,28 +13,52 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) { }
   async createUser(userdata: SignUpDto) {
-    const { name, email, password } = userdata
-    console.log(userdata)
-    const existingUser = await this.userRepository.findOne({ where: { email } })
+    const { username, email, password } = userdata
 
-    if (existingUser) {
+    const existingUsername = await this.userRepository.findOne({ where: { username } })
+
+    if (existingUsername) {
+      throw new ConflictException(`User with username ${username} already exists`)
+    }
+
+    const existingEmail = await this.userRepository.findOne({ where: { email } })
+
+    if (existingEmail) {
       throw new ConflictException(`User with email ${email} already exists`)
     }
 
+
     const hashedpassword = await this.hashingService.hashPassword(password)
-    const userWithHashPassword = { name, email, password: hashedpassword }
+    const userWithHashPassword = { username, email, password: hashedpassword }
 
     const user = await this.userRepository.createAndSaveUser(userWithHashPassword)
     return user;
   }
 
-  async loginUser(credentials: LoginDto,  response: Response) {
-    const { email, password } = credentials
+  async loginUser(credentials: LoginDto, response: Response) {
+    const { username, email, password } = credentials
 
-    const user = await this.userRepository.findOne({ where: { email } })
-    if (!user) {
-      throw new NotFoundException(`user with ${email} not found`)
-    }
+      const credential = username || email
+
+  
+
+      const user = await this.userRepository.findOne({
+        where: [
+          { email: credential },
+          { username: credential }
+        ]
+      })
+
+
+      if (!user) {
+        throw new NotFoundException(`Invalid credentials`)
+      }
+      
+      if (user.isActive === false) {
+        throw new UnauthorizedException('User is inactive');
+      }
+
+    
 
     const hashedpassword = await this.hashingService.comparePassword(password, user.password)
 
@@ -42,18 +66,18 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials')
     }
 
-    const payload = { email: user.email, name: user.name, id: user.id };
+    const payload = { email: user.email, name: user.username, id: user.id };
     const access_token = await this.jwtService.signAsync(payload);
 
     response.cookie('token', access_token, {
-    
+
       secure: false,
-    
+
     });
-    
+
     return {
-      name: user.name,
       userId: user.id,
+      name: user.username,
       email: user.email,
       token: access_token,
 

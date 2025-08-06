@@ -20,24 +20,21 @@ export class UserService {
   }
   
 
+ async makeInactive(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    if (user.isActive === false) {
+      throw new BadRequestException('User is already inactive');
+    }
+    return this.userRepository.makeInactive(id);
+  }
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
 
- 
-  async updateUserProfile(id:number,data:any){
-    const{image_url} = data
-    const user =  await this.userRepository.findOneBy({id})
-    if(!user){
-      throw new BadRequestException('User not found')
-    }
-    user.avatar = image_url
-    console.log(image_url)
 
-    await this.userRepository.save(user)
-    return user.avatar
-
-  }
   remove(id: number) {
     return `This action removes a #${id} user`;
   }

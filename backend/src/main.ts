@@ -9,7 +9,7 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 config();
 
 async function bootstrap() {
-    initializeTransactionalContext()
+  initializeTransactionalContext()
 
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());

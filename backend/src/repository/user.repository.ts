@@ -15,7 +15,6 @@ export class UserRepository extends Repository<User> {
     return this.find();
   }
   async createAndSaveUser(userdata: SignUpDto) {
-    console.log(userdata);
     const user = this.create(userdata);
     await this.save(user);
     return { user };
@@ -46,6 +45,11 @@ export class UserRepository extends Repository<User> {
       .getMany();
 
     return { users, totalCount };
+  }
+
+  async makeInactive(id: number) {
+    this.update(id, { isActive: false });
+    return { message: 'User made inactive successfully' };
   }
 
   async findUserById(userId: number) {

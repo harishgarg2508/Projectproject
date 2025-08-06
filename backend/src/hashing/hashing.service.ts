@@ -3,11 +3,11 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class HashingService {
-    async hashPassword(password: string): Promise<string> {
+    public async hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
 
-    async comparePassword(password: string, hash: string): Promise<boolean> {
+   public async comparePassword(password: string, hash: string): Promise<boolean> {
         return bcrypt.compare(password, hash);
     }
 }

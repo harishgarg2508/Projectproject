@@ -8,6 +8,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './config/datasource';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
+import { CommentsModule } from './comments/comments.module';
+import { VotesModule } from './votes/votes.module';
+import { TagsModule } from './tags/tags.module';
+import { FeedbacksModule } from './feedbacks/feedbacks.module';
+import { FeedbackTagsModule } from './feedback-tags/feedback-tags.module';
 
 
 @Module({
@@ -15,9 +20,9 @@ import { DataSource } from 'typeorm';
     UserModule,
     AuthModule,
     HashingModule,
-      TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
       useFactory() {
-        return dataSourceOptions; 
+        return dataSourceOptions;
       },
       async dataSourceFactory(options) {
         if (!options) {
@@ -26,8 +31,13 @@ import { DataSource } from 'typeorm';
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
+    CommentsModule,
+    VotesModule,
+    TagsModule,
+    FeedbacksModule,
+    FeedbackTagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

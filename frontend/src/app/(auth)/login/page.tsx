@@ -9,7 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { loginUser } from "@/app/redux/slices/user.slice";
+import { z } from "zod";
 
+type User = z.infer<typeof LoginSchema>;
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
@@ -21,17 +23,18 @@ export default function LoginPage() {
 
   const user: ReturnType<typeof useAppSelector> = useAppSelector((state: RootState) => state.user);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginDataInterface>({
+  const { register, handleSubmit, formState: { errors } } = useForm<User>({
     resolver: zodResolver(LoginSchema)
   });
 
  const submitData = async (data: LoginDataInterface) => {
   try {
+    console.log(data);
     const response = await dispatch(loginUser(data)).unwrap();
     toast.success('Login successful!');
     setTimeout(()=>{
 
-      router.push("/home");
+      router.push("/");
     },1000)
   } catch (error) {
     toast.error('Login failed. Please check your credentials.');
@@ -54,12 +57,13 @@ export default function LoginPage() {
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit(submitData)} noValidate sx={{ mt: 1 }}>
+          
           <TextField
             margin="normal"
             required
             fullWidth
             id="email"
-            label="Email"
+            label="Email or username"
             autoComplete="email"
             autoFocus
             {...register("email")}

@@ -9,11 +9,16 @@ import { Toaster, toast } from 'sonner';
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { signUpUser } from "@/app/redux/slices/user.slice";
+import { z } from "zod";
 
+
+
+
+type User = z.infer<typeof SignupSchema>;
 
 export default function SignupPage() {
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupDataInterface>({
+  const { register, handleSubmit, formState: { errors } } = useForm<User>({
     resolver: zodResolver(SignupSchema),
   });
   const router = useRouter();
@@ -45,11 +50,7 @@ export default function SignupPage() {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        {errors && (
-          <Typography variant="body2" color="error.main" align="center">
-            {errors?.name?.message || errors?.email?.message || errors?.password?.message}
-          </Typography>
-        )}
+
         <Box component="form" onSubmit={handleSubmit(submitData)} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -59,10 +60,11 @@ export default function SignupPage() {
             label="Name"
             autoComplete="name"
             autoFocus
-            {...register("name")}
-            error={!!errors.name}
-            helperText={errors.name?.message}
+            {...register("username")}
+            error={!!errors.username}
+            helperText={errors.username?.message}
           />
+
           <TextField
             margin="normal"
             required

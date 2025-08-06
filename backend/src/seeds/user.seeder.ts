@@ -1,23 +1,62 @@
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
-import { User } from '../user/entities/user.entity';
+import { Role, User } from '../user/entities/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { HashingService } from 'src/hashing/hashing.service';
 export class CategorySeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const userRepository = dataSource.getRepository(User);
-    const existingUsers = await userRepository.find();
-    if (existingUsers.length > 0) {
-      console.log('Categories already exist, skipping seeding.');
-      return;
-    }
+  
 
-    const categoryData: CreateUserDto[] = [
-      //  user data
+    const adminData: CreateUserDto[] = [
+      {
+        username: 'admin1',
+        email: 'admin1@gmail.com',
+        password: 'admin1',
+        role: Role.ADMIN
+      },
+      {
+        username: 'admin2',
+        email: 'admin2@gmail.com',
+        password: 'admin2',
+        role: Role.ADMIN
+      },
+      {
+        username: 'admin3',
+        email: 'admin3@gmail.com',
+        password: 'admin3',
+        role: Role.ADMIN
+      },
+      {
+        username: 'admin4',
+        email: 'admin4@gmail.com',
+        password: 'admin4',
+        role: Role.ADMIN
+      },
+      {
+        username: 'admin5',
+        email: 'admin5@gmail.com',
+        password: 'admin5',
+        role: Role.ADMIN
+      },
+      {
+        username: 'admin6',
+        email: 'admin6@gmail.com',
+        password: 'admin6',
+        role: Role.ADMIN
+      }
+
+
+
+
     ];
-    await userRepository.save(categoryData);
-    console.log('Category seeding successful!');
+
+    
+      await userRepository.save(adminData);
+    
+    console.log('Admin seeding successful!');
   }
 }

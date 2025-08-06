@@ -1,5 +1,13 @@
 
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Comment } from "src/comments/entities/comment.entity";
+import { Feedback } from "src/feedbacks/entities/feedback.entity";
+import { Vote } from "src/votes/entities/vote.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+
+export enum Role{
+    ADMIN = 'ADMIN',
+    USER = 'USER'
+}
 
 
 @Entity('user')
@@ -9,8 +17,8 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
-    name: string
+    @Column({ unique: true })
+    username: string
 
     @Column({ unique: true })
     email: string
@@ -18,18 +26,23 @@ export class User {
     @Column()
     password: string
 
-    @Column({nullable:true})
-    avatar?: string
-
-
-    @Column({default:true})
-    isActive: boolean
+    @Column({type:'enum',enum:Role,default:Role.USER})
+    role: Role
 
     @CreateDateColumn()
     createdAt: Date
 
-    @DeleteDateColumn()
-    deletedat: Date
+    @Column({default:true})
+    isActive: boolean
+
+    @OneToMany(()=>Feedback,(feedback)=>feedback.user)
+    feedbacks: Feedback[]
+
+    @OneToMany(()=>Comment,(comment)=>comment.user)
+    comments: Comment[]
+
+    @OneToMany(()=>Vote,(vote)=>vote.user)
+    votes: Vote[]
 
    
 

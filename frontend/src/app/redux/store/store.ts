@@ -6,10 +6,11 @@
   import storage from 'redux-persist/lib/storage'; 
 
   import userReducer from '@/app/redux/slices/user.slice';
-
+import feedbackReducer from '@/app/redux/slices/feedback.slice';
 
   const rootReducer = combineReducers({
     user: userReducer,
+    feedback: feedbackReducer
   });
 
   export type RootState = ReturnType<typeof rootReducer>;

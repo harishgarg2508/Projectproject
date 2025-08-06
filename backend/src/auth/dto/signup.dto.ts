@@ -1,11 +1,11 @@
 
-import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsOptional, IsString, Min, min } from "class-validator"
+import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min, min } from "class-validator"
 
 export class SignUpDto {
 
 
     @IsString()
-    name:string
+    username:string
 
     @IsOptional()
     @IsString()
@@ -14,5 +14,7 @@ export class SignUpDto {
     @IsString()
     @IsNotEmpty()
     password: string
+
+
 
 }
