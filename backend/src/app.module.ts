@@ -20,6 +20,7 @@ import { FeedbackTagsModule } from './feedback-tags/feedback-tags.module';
     UserModule,
     AuthModule,
     HashingModule,
+    // TypeOrmModule.forRoot(dataSourceOptions),
     TypeOrmModule.forRootAsync({
       useFactory() {
         return dataSourceOptions;
@@ -28,7 +29,7 @@ import { FeedbackTagsModule } from './feedback-tags/feedback-tags.module';
         if (!options) {
           throw new Error('Invalid options passed');
         }
-        return addTransactionalDataSource(new DataSource(options));
+        return addTransactionalDataSource({name: 'test', dataSource:new DataSource(options)});
       },
     }),
     CommentsModule,
