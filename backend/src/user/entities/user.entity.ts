@@ -2,7 +2,8 @@
 import { Comment } from "src/comments/entities/comment.entity";
 import { Feedback } from "src/feedbacks/entities/feedback.entity";
 import { Vote } from "src/votes/entities/vote.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import * as bcrypt from 'bcrypt';
 
 export enum Role{
     ADMIN = 'ADMIN',
@@ -45,6 +46,11 @@ export class User {
     votes: Vote[]
 
    
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 
 }
 

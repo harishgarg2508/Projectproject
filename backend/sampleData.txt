@@ -1,0 +1,34 @@
+GET http://localhost:3001/feedbacks?search=tit&tagIds=1&tagIds=2&orderBy=ASC&status=PRIVATE
+
+POST http://localhost:3001/feedbacks
+
+
+{
+    "title":"title3",
+    "description":"this is descripton",
+    "status":"PUBLIC",
+    "tagNames":["tasg1","tags2","tag5","tag6"]
+    
+
+}
+
+POST http://localhost:3001/comments
+
+PATCH http://localhost:3001/user/feedback/:feedbackId/status
+PATCH http://localhost:3001/user/comment/:commentId/status
+PATCH http://localhost:3001/user/userId
+
+{
+    "content":"this is comment",
+    "feedback_id":1
+    // "parent_id":2
+
+
+}
+
+http://localhost:3001/votes
+
+{
+    "voteType":"UPVOTE",
+    "feedback_id":4
+}

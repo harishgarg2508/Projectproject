@@ -1,5 +1,5 @@
 import { Transform, Type } from "class-transformer";
-import {  IsArray, IsEnum, IsNumber, IsOptional } from "class-validator";
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 
 export enum OrderBy {
     ASC = 'ASC',
@@ -21,10 +21,23 @@ export class FeedbackFilterDto {
     @Type(() => Number)
     tagIds?: number[];
 
+
+
+    @IsOptional()
+    @Transform(({ value }) => {
+        if (typeof value === 'string') {
+            return value.split(',').map(item => item.trim());
+        }
+        return value;
+    })
+    @IsArray()
+    @IsString({ each: true })
+    authorIds?: string[];
+
     @IsOptional()
     @Type(() => Number)
     tagId?: number;
-    
+
     @IsOptional()
     page?: number;
 

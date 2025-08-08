@@ -19,38 +19,41 @@ export class FeedbackRepository extends Repository<Feedback> {
   }
 
   async findAllFeedbacks(filters: FeedbackFilterDto) {
-  const { search, limit = LIMIT, page = PAGE, status, orderBy, tagIds ,tagId} = filters;
-  const query = this.createQueryBuilder('feedback')
-    .where('feedback.is_visible = :is_visible', { is_visible: true })
-    .leftJoinAndSelect('feedback.tags', 'tags')
-    .leftJoinAndSelect('tags.tag', 'tag')
-    .leftJoinAndSelect('feedback.user', 'user')
-    .leftJoinAndSelect('feedback.votes', 'votes');
-  if (search) {
-    query.andWhere('(feedback.title LIKE :search OR feedback.description LIKE :search)', { search: `%${search}%` });
+    const { search, limit = LIMIT, page = PAGE, status, orderBy, tagIds, tagId ,authorIds} = filters;
+    const query = this.createQueryBuilder('feedback')
+      .where('feedback.is_visible = :is_visible', { is_visible: true })
+      .leftJoinAndSelect('feedback.tags', 'tags')
+      .leftJoinAndSelect('tags.tag', 'tag')
+      .leftJoinAndSelect('feedback.user', 'user')
+      .leftJoinAndSelect('feedback.votes', 'votes')
+      .leftJoinAndSelect('feedback.comments', 'comments');
+    if (search) {
+      query.andWhere('(feedback.title LIKE :search OR feedback.description LIKE :search)', { search: `%${search}%` });
+    }
+    if (tagId) {
+      query.andWhere('tags.id = :tagId', { tagId });
+    }
+    if (tagIds && tagIds.length > 0) {
+      query.orWhere('tags.id IN (:...tagIds)', { tagIds });
+    }
+    if(authorIds && authorIds.length > 0) {
+      query.andWhere('feedback.user.id IN (:...authorIds)', { authorIds });
+    }
+    if (orderBy) {
+      query.orderBy('feedback.score', orderBy);
+    }
+    if (limit) {
+      query.take(limit);
+    }
+    if (page) {
+      query.skip((page - 1) * limit);
+    }
+    if (status) {
+      query.andWhere('feedback.status = :status', { status });
+    }
+    const totalCount = await query.getCount();
+    const feedbacks = await query.getMany();
+    return { feedbacks, totalCount };
   }
-  if(tagId)
-  {
-    query.andWhere('tags.id = :tagId', { tagId });
-  }
- if (tagIds && tagIds.length > 0) {
-    query.orWhere('tags.id IN (:...tagIds)', { tagIds });
-  }
-  if (orderBy) {
-    query.orderBy('feedback.score', orderBy);
-  }
-  if (limit) {
-    query.take(limit);
-  }
-  if (page) {
-    query.skip((page - 1) * limit);
-  }
-  if (status) {
-    query.andWhere('feedback.status = :status', { status });
-  } 
-  const totalCount = await query.getCount();
-  const feedbacks = await query.getMany();
-  return { feedbacks, totalCount };
-}
 }
 

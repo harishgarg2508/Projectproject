@@ -2,16 +2,25 @@ import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { Role, User } from '../user/entities/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { HashingService } from 'src/hashing/hashing.service';
+import * as bcrypt from 'bcrypt';
+
+class HashingService {
+  public async hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 10);
+  }
+
+}
+
 export class CategorySeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const userRepository = dataSource.getRepository(User);
-  
+    const hashingService = new HashingService();
 
-    const adminData: CreateUserDto[] = [
+
+    const admins: CreateUserDto[] = [
       {
         username: 'admin1',
         email: 'admin1@gmail.com',
@@ -21,7 +30,7 @@ export class CategorySeeder implements Seeder {
       {
         username: 'admin2',
         email: 'admin2@gmail.com',
-        password: 'admin2',
+        password: 'admin2', 
         role: Role.ADMIN
       },
       {
@@ -49,14 +58,21 @@ export class CategorySeeder implements Seeder {
         role: Role.ADMIN
       }
 
-
-
-
     ];
 
-    
-      await userRepository.save(adminData);
-    
+    const adminData: CreateUserDto[] = []
+    for (const admin of admins) {
+      const hashedPassword = await hashingService.hashPassword(admin.password);
+      adminData.push({
+        username: admin.username,
+        email: admin.email,
+        password: hashedPassword,
+        role: Role.ADMIN
+      })
+    }
+
+    await userRepository.save(adminData);
+
     console.log('Admin seeding successful!');
   }
 }

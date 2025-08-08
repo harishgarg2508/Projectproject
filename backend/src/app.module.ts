@@ -20,18 +20,18 @@ import { FeedbackTagsModule } from './feedback-tags/feedback-tags.module';
     UserModule,
     AuthModule,
     HashingModule,
-    // TypeOrmModule.forRoot(dataSourceOptions),
-    TypeOrmModule.forRootAsync({
-      useFactory() {
-        return dataSourceOptions;
-      },
-      async dataSourceFactory(options) {
-        if (!options) {
-          throw new Error('Invalid options passed');
-        }
-        return addTransactionalDataSource({name: 'test', dataSource:new DataSource(options)});
-      },
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
+    // TypeOrmModule.forRootAsync({
+    //   useFactory() {
+    //     return dataSourceOptions;
+    //   },
+    //   async dataSourceFactory(options) {
+    //     if (!options) {
+    //       throw new Error('Invalid options passed');
+    //     }
+    //     return addTransactionalDataSource({name: process.env.DATASOURCE_NAME, dataSource:new DataSource(options)});
+    //   },
+    // }),
     CommentsModule,
     VotesModule,
     TagsModule,
