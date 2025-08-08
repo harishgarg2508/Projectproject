@@ -38,8 +38,9 @@ export default function AddComment({ feedbackId }: { feedbackId: number }) {
   });
 
   const submitData = (data: Comment) => {
+    const feedback_id = Number(feedbackId);
     console.log(data); 
-    dispatch(createComment({ ...data, feedbackId })).unwrap();
+    dispatch(createComment({ ...data, feedback_id })).unwrap();
     toast.success("Comment created successfully!");
     reset();
   };
@@ -65,11 +66,11 @@ export default function AddComment({ feedbackId }: { feedbackId: number }) {
                 <Input
                   autoFocus
                   fullWidth
-                  {...register("comment")}
-                  error={!!errors.comment}
+                  {...register("content")}
+                  error={!!errors.content}
                 />
                 <Typography color="error" variant="caption">
-                  {errors.comment?.message}
+                  {errors.content?.message}
                 </Typography>
                 <Button variant='contained' size='small' type='submit' sx={{ mt: 2 }}>Add</Button>
               </FormControl>

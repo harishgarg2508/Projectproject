@@ -25,8 +25,8 @@ export class TagsService {
     return tags?.raw ?? [];
   }
 
-  findAll() {
-    return `This action returns all tags`;
+  findAll(search: string) {
+    return this.tagsRepository.findAll(search);
   }
 
   findOne(id: number) {

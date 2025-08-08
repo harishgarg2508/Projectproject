@@ -16,4 +16,16 @@ export class TagRepository extends Repository<Tag> {
     await this.save(tag);
     return tag;
   }
+
+  async findAll(search: string) {
+    const qb = this.createQueryBuilder('tag')
+    const count = await qb.getCount();
+
+    if(search) {
+      qb.where('tag.name LIKE :search', { search: `%${search}%` });
+    }
+    qb.take(10);
+    qb.orderBy('tag.created_at', 'DESC');
+    return qb.getMany();
+  }
 }

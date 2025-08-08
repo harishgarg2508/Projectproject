@@ -7,10 +7,13 @@
 
   import userReducer from '@/app/redux/slices/user.slice';
 import feedbackReducer from '@/app/redux/slices/feedback.slice';
-
+import tagsReducer from '@/app/redux/slices/tags.slice';
+import userDataReducer from '@/app/redux/slices/userdata.slice';
   const rootReducer = combineReducers({
     user: userReducer,
-    feedback: feedbackReducer
+    feedback: feedbackReducer,
+    tags: tagsReducer,
+    userData: userDataReducer
   });
 
   export type RootState = ReturnType<typeof rootReducer>;

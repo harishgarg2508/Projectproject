@@ -25,7 +25,10 @@ export class CommentRepository extends Repository<Comment> {
   async getComments() {
     const qb = this.createQueryBuilder('comment');
     qb.where('comment.is_visible = :is_visible', { is_visible: true });
-    qb.leftJoinAndSelect('comment.parent', 'parent');
+    qb.leftJoinAndSelect('comment.parent', 'parent')
+    .leftJoinAndSelect('parent.parent', 'grandparent')
+    .leftJoinAndSelect('comment.children', 'child')
+    .leftJoinAndSelect('parent.children', 'children');
     qb.leftJoinAndSelect('comment.user', 'user');
     return qb.getMany();
   }

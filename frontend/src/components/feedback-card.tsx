@@ -12,7 +12,6 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
 import { Chip, Stack } from '@mui/material';
-
 import { FeedbackInterface } from '@/app/redux/slices/feedback.slice';
 import AddComment from './add-comment';
 import { useAppDispatch } from '@/app/redux/hooks';
@@ -33,7 +32,7 @@ export default function FeedBackCard(props: FeedbackInterface) {
         dispatch(upvoteDownvote({ feedback_id: props.id, voteType }));
     };
 
-    const { title, description, created_at, id, score, status, tags, user, totalCount } = props
+    const { title, description, created_at, id, score, status, tags, user } = props
     return (
         <Card sx={{ width: '100%', bgcolor: 'background.paper' }}>
             <CardContent>

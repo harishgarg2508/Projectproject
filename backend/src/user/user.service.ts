@@ -10,6 +10,9 @@ export class UserService {
     private readonly hashingService: HashingService,
   ) { }
  
+  async findAll() {
+    return this.userRepository.findAll();
+  }
 
   findUserById(id:number){
     return this.userRepository.findUserById(id)

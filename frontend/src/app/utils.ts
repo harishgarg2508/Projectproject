@@ -12,8 +12,17 @@ export interface SignupDataInterface {
   email?: string;
   password: string;
 }
+
+export const feedbackSchema = z.object({
+  title: z.string().trim().min(5, { message: "Title is required" }),
+  description: z.string().trim().min(5, { message: "Description is required" }),
+  status: z.enum(["PUBLIC", "PRIVATE"]).default("PUBLIC"),
+  tagNames: z.array(z.string()).min(1,{message: "tag is required"}), 
+});
+
+
 export const CommentSchema = z.object({
-  comment: z.string().min(1, { message: "Comment is required" }),
+  content: z.string().min(1, { message: "Comment is required" }),
 });
 export const SignupSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters long" }),

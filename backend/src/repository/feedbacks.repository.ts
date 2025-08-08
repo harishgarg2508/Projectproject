@@ -34,10 +34,10 @@ export class FeedbackRepository extends Repository<Feedback> {
       query.andWhere('tags.id = :tagId', { tagId });
     }
     if (tagIds && tagIds.length > 0) {
-      query.orWhere('tags.id IN (:...tagIds)', { tagIds });
+      query.andWhere('tags.id IN (:...tagIds)', { tagIds });
     }
     if(authorIds && authorIds.length > 0) {
-      query.andWhere('feedback.user.id IN (:...authorIds)', { authorIds });
+      query.andWhere('user.id IN (:...authorIds)', { authorIds });
     }
     if (orderBy) {
       query.orderBy('feedback.score', orderBy);

@@ -13,21 +13,22 @@ export interface FeedbackInterface{
     status: string,
     score:number,
     tags:[{
-        id: number,
-        name: string
+        tag:{id: number,
+        name: string}
     }],
     user: {
         id: number,
         username: string,
     },
     created_at: string
-    totalCount: number
+   
 }
 
 interface FeedbackState {
   feedbacks: FeedbackInterface[];
   isLoading: boolean;
   error: string;
+  totalCount: number
 }
 
 
@@ -36,6 +37,7 @@ const initialState: FeedbackState = {
   feedbacks: [],
   isLoading: false,
   error: "",
+  totalCount: 0
 };
 
 const feedbackSlice = createSlice({

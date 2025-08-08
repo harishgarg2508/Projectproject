@@ -12,7 +12,9 @@ export class UserRepository extends Repository<User> {
   }
 
   async findAll() {
-    return this.find();
+    return this.find({
+      select: ['id', 'username', 'email'],
+    });
   }
   async createAndSaveUser(userdata: SignUpDto) {
     const user = this.create(userdata);

@@ -36,7 +36,7 @@ const taskSchema = z
     }
   );
 
-type TaskFormType = z.infer<typeof taskSchema>;
+  type TaskFormType = z.infer<typeof taskSchema>;
 
 interface CreateTaskDialogProps {
   open: boolean;
