@@ -3,7 +3,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { feedbackSchema } from '@/app/utils';
-import { z } from 'zod';
+import { nullable, z } from 'zod';
 import {
   Box,
   FormControl,
@@ -46,6 +46,7 @@ export default function CreateFeedback() {
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
       tagNames: [],
+      status: 'PUBLIC',
     },
   });
 

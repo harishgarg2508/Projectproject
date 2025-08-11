@@ -16,7 +16,7 @@ export interface SignupDataInterface {
 export const feedbackSchema = z.object({
   title: z.string().trim().min(5, { message: "Title is required" }),
   description: z.string().trim().min(5, { message: "Description is required" }),
-  status: z.enum(["PUBLIC", "PRIVATE"]).default("PUBLIC"),
+  status: z.enum(["PUBLIC", "PRIVATE"]),
   tagNames: z.array(z.string()).min(1,{message: "tag is required"}), 
 });
 
