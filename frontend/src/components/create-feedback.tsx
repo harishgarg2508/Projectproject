@@ -75,7 +75,6 @@ export default function CreateFeedback() {
       <Box
         sx={{
           display: 'grid',
-          // gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: 2,
         }}
       >
