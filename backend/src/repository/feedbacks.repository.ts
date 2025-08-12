@@ -26,7 +26,8 @@ export class FeedbackRepository extends Repository<Feedback> {
       .leftJoinAndSelect('tags.tag', 'tag')
       .leftJoinAndSelect('feedback.user', 'user')
       .leftJoinAndSelect('feedback.votes', 'votes')
-      .leftJoinAndSelect('feedback.comments', 'comments');
+      .leftJoinAndSelect('feedback.comments', 'comments','comments.parent IS null');
+
     if (search) {
       query.andWhere('(feedback.title LIKE :search OR feedback.description LIKE :search)', { search: `%${search}%` });
     }

@@ -3,7 +3,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { feedbackSchema } from '@/app/utils';
-import { nullable, z } from 'zod';
+import {  z } from 'zod';
 import {
   Box,
   FormControl,
@@ -67,6 +67,7 @@ export default function CreateFeedback() {
     dispatch(createFeedback(data))
     console.log('Form Values:', data);
     reset();
+    window.location.reload()
   };
 
   return (
@@ -130,7 +131,11 @@ export default function CreateFeedback() {
               value={value?.map((tagName) => ({ label: tagName, value: tagName })) || []}
               onChange={(selected) => {
                 const tagNames = selected.map((tag) => tag.value);
-                onChange(tagNames); // Pass string[] to form state
+                onChange(tagNames); 
+              }}
+              menuPortalTarget={document.body}
+              styles={{
+                menuPortal: (base) => ({ ...base, zIndex: 9999 }),
               }}
               placeholder="Select or create tags"
             />

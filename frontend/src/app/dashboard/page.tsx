@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AddTags from "@/components/add-tags";
 import AddUsers from "@/components/add-users";
-import CreateFeedback from "@/components/create-feedback"; 
+import CreateFeedback from "@/components/create-feedback";
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
@@ -91,6 +91,7 @@ export default function DashboardPage() {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
+
           mb={2}
         >
           <h1 style={{ textAlign: "center" }}>Dashboard</h1>
@@ -122,32 +123,36 @@ export default function DashboardPage() {
           </Stack>
         </Stack>
 
-        <Card>
+        <Card variant="outlined" >
           <Stack direction={"row"} spacing={2}>
+
             <CardContent>
-              <TextField
-                name="search"
-                label="Search by Title"
-                variant="outlined"
-                size="small"
-                value={filters.search}
-                onChange={handleFilterChange}
-                sx={{ minWidth: "200px", flexGrow: 1 }}
-              />
+              <Stack
+                direction={"row"}
+                alignContent={"center"}
+                spacing={2}
+                sx={{ mt: 2, minWidth: "50%" }}
+              >
+                <TextField
+                  name="search"
+                  label="Search by Title"
+                  variant="outlined"
+                  size="small"
+                  value={filters.search}
+                  onChange={handleFilterChange}
+                  sx={{ minWidth: "200px", flexGrow: 1 }}
+                />
+                <AddTags />
+                <AddUsers />
+              </Stack>
+
+
             </CardContent>
           </Stack>
         </Card>
       </Box>
 
-      <Stack
-        direction={"row"}
-        alignContent={"center"}
-        spacing={2}
-        sx={{ mt: 2, minWidth: "50%" }}
-      >
-        <AddTags />
-        <AddUsers />
-      </Stack>
+
 
       {isLoading ? (
         <Box display="flex" justifyContent="center" mt={5}>
@@ -157,12 +162,15 @@ export default function DashboardPage() {
         <>
           {error && <p style={{ color: "red" }}>{error}</p>}
 
-          <Card variant="outlined" sx={{ width: "100%", mb: 4, p: 2 }}>
+          <Card variant="outlined" sx={{ width: "100%", p: 2 }}>
             <CardContent>
               <Stack
                 direction="column"
+                alignItems="center"
+                justifyContent="center" 
                 spacing={2}
-                sx={{ width: "100%", padding: 2, mb: 5 }}
+                sx={{ padding: 2, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap"}}
+
               >
                 {(feedbacks || []).map((feedback) => (
                   <FeedBackCard key={feedback.id} {...feedback} />

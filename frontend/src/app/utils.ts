@@ -51,10 +51,12 @@ export const axiosInstance = axios.create({
   
 
 export interface UserState {
+
   isLoggedIn: boolean;
   isLoading: boolean;
   token: string;
   userId: string;
+  role:'ADMIN' | 'USER';
   name: string;
   email: string;
   error: string;

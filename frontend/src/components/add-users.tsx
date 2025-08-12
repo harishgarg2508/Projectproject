@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { getFeedback } from '@/app/redux/thunks/feedback.thunk';
 import { getUsers } from '@/app/redux/thunks/user.thunk';
 
@@ -40,20 +40,27 @@ export default function AddUsers() {
     const selectedIds = selectedOptions.map((opt) => opt.value);
     const commaSeparated = selectedIds.join(',');
 
-   dispatch(getFeedback({ authorIds: commaSeparated }));   
+    dispatch(getFeedback({ authorIds: commaSeparated }));
 
-   
+
   };
 
   return (
-    <Stack spacing={2} sx={{ minWidth: '50%' }}>
+    <Stack direction={'row'} spacing={2} sx={{ minWidth: '100%' }}>
+
+
       <Select
         isMulti
+        placeholder="Filter By Users"
         isLoading={isLoading}
         closeMenuOnSelect={false}
         components={animatedComponents}
         options={userData}
         value={selectedOptions}
+        menuPortalTarget={document.body}
+        styles={{
+          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        }}
         onChange={(selected) => setSelectedOptions(selected as any[])}
       />
 

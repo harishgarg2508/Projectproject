@@ -46,18 +46,23 @@ export default function AddTags() {
   };
 
   return (
-    <Stack spacing={2} sx={{ minWidth: '50%' }}>
+    <Stack direction={'row'} spacing={2} sx={{ minWidth: '100%', zIndex: 10 }}>
       <Select
         isMulti
+        placeholder="Filter By Tags"
         isLoading={isLoading}
         closeMenuOnSelect={false}
         components={animatedComponents}
         options={tagOptions}
         value={selectedOptions}
+         menuPortalTarget={document.body}
+        styles={{
+          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        }}
         onChange={(selected) => setSelectedOptions(selected as any[])}
       />
 
-      <Button size='small' variant="contained" onClick={handleSubmit}>
+      <Button size='small'  variant="contained" onClick={handleSubmit}>
         Apply
       </Button>
     </Stack>

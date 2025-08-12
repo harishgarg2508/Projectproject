@@ -33,6 +33,7 @@ export const signUpUser = createAsyncThunk(
 const initialState: UserState = {
   isLoggedIn: false,
   isLoading: false,
+  role: 'USER',
   token: '',
   userId: '',
   name: '',
@@ -84,6 +85,7 @@ const userSlice = createSlice({
       state.userId = action.payload.userId;
       state.name = action.payload.name;
       state.email = action.payload.email;
+      state.role = action.payload.role;
       state.isLoading = false;
       state.error = '';
     });
