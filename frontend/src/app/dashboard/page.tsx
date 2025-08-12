@@ -16,6 +16,10 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import debounce from "lodash/debounce";
 import { logout } from "../redux/slices/user.slice";
@@ -34,7 +38,7 @@ export default function DashboardPage() {
   const [filters, setFilters] = useState({
     search: "",
     page: 1,
-    orderby: "ASC",
+    orderby: "DESC"
   });
 
   const { feedbacks, totalCount, error, isLoading } = useAppSelector(
@@ -67,6 +71,14 @@ export default function DashboardPage() {
     debouncedDispatch(newFilters);
   };
 
+  const handleOrderByChange = (e: any) => {
+    const newOrderBy = e.target.value;
+    const newFilters = { ...filters, orderby: newOrderBy, page: 1 };
+    setPage(1);
+    setFilters(newFilters);
+    dispatch(getFeedback(newFilters));
+  };
+
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
     value: number
@@ -91,7 +103,6 @@ export default function DashboardPage() {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-
           mb={2}
         >
           <h1 style={{ textAlign: "center" }}>Dashboard</h1>
@@ -123,15 +134,14 @@ export default function DashboardPage() {
           </Stack>
         </Stack>
 
-        <Card variant="outlined" >
+        <Card variant="outlined">
           <Stack direction={"row"} spacing={2}>
-
             <CardContent>
               <Stack
                 direction={"row"}
                 alignContent={"center"}
                 spacing={2}
-                sx={{ mt: 2, minWidth: "50%" }}
+                sx={{ mt: 2 }}
               >
                 <TextField
                   name="search"
@@ -142,17 +152,30 @@ export default function DashboardPage() {
                   onChange={handleFilterChange}
                   sx={{ minWidth: "200px", flexGrow: 1 }}
                 />
-                <AddTags />
-                <AddUsers />
+                
+                <FormControl variant="outlined" size="small" sx={{ minWidth: "200px", flexGrow: 1 }}>
+                  <InputLabel id="orderby-label">Order By</InputLabel>
+                  <Select
+                    labelId="orderby-label"
+                    name="orderby"
+                    label="Order By"
+                    value={filters.orderby}
+                    onChange={handleOrderByChange}
+                  >
+                    <MenuItem value="ASC">ASC</MenuItem>
+                    <MenuItem value="DESC">DESC</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Stack direction={"row"} spacing={2}>
+                  <AddTags />
+                  <AddUsers />
+                </Stack>
               </Stack>
-
-
             </CardContent>
           </Stack>
         </Card>
       </Box>
-
-
 
       {isLoading ? (
         <Box display="flex" justifyContent="center" mt={5}>
@@ -167,10 +190,15 @@ export default function DashboardPage() {
               <Stack
                 direction="column"
                 alignItems="center"
-                justifyContent="center" 
+                justifyContent="center"
                 spacing={2}
-                sx={{ padding: 2, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap"}}
-
+                sx={{ 
+                  padding: 2, 
+                  display: "flex", 
+                  justifyContent: "space-between", 
+                  alignItems: "center", 
+                  flexWrap: "wrap" 
+                }}
               >
                 {(feedbacks || []).map((feedback) => (
                   <FeedBackCard key={feedback.id} {...feedback} />

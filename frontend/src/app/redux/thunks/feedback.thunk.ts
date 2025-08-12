@@ -9,6 +9,7 @@ interface Feedbackfilters {
     page?: number;
     tagIds?: string;
     authorIds?: string
+    orderby?: string
 }
 
 export const getFeedback = createAsyncThunk(
@@ -21,6 +22,8 @@ export const getFeedback = createAsyncThunk(
             if (filters.page) params.append('page', filters.page.toString());
             if (filters.tagIds) params.append('tagIds', filters.tagIds);
             if (filters.authorIds) params.append('authorIds', filters.authorIds);
+            if (filters.orderby) params.append('orderBy', filters.orderby);
+
 
             const response = await axiosInstance.get(`/feedbacks?${params.toString()}`);
             return response.data;

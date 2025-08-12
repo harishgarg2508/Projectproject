@@ -66,9 +66,12 @@ export class CommentsService {
   }
 
 
-  findAll() {
-    return this.commentsRepository.getComments();
-  }
+async findAll(feedbackId: number) {
+  return this.commentsRepository.getComments(feedbackId, {
+    relations: ['user', 'children', 'children.user'], 
+  });
+}
+
 
   findOne(id: number) {
     return `This action returns a #${id} comment`;

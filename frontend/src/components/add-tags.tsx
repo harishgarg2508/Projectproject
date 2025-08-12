@@ -46,7 +46,7 @@ export default function AddTags() {
   };
 
   return (
-    <Stack direction={'row'} spacing={2} sx={{ minWidth: '100%', zIndex: 10 }}>
+    <Stack direction={'row'} spacing={2} sx={{ minWidth: '100%' }}>
       <Select
         isMulti
         placeholder="Filter By Tags"

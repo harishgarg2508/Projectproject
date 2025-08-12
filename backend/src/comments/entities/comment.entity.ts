@@ -1,9 +1,11 @@
 import { Feedback } from "src/feedbacks/entities/feedback.entity";
 import { User } from "src/user/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, TreeChildren, TreeParent, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn,     TreeLevelColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent, UpdateDateColumn } from "typeorm";
 
 
 @Entity()
+@Tree("closure-table")
+
 export class Comment {
 
     @PrimaryGeneratedColumn()
@@ -27,11 +29,11 @@ export class Comment {
     @ManyToOne(()=>Feedback,(feedback)=>feedback.comments)
     feedback: Feedback
 
-    @ManyToOne(()=>Comment,(comment)=>comment.children)
+    @TreeParent()
     parent: Comment
 
-    @OneToMany(()=>Comment,(comment)=>comment.parent)
-    children: Comment
+    @TreeChildren()
+    children: Comment[]
 
 
 }

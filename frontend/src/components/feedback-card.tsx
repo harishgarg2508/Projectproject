@@ -21,6 +21,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/navigation';
 import LoginDialog from './login-dialog';
 import { axiosInstance } from '@/app/utils';
+import ViewComment from './view-comments';
+import { set } from 'lodash';
 
 export default function FeedBackCard(props: FeedbackInterface) {
     const router = useRouter()
@@ -32,18 +34,52 @@ export default function FeedBackCard(props: FeedbackInterface) {
     const dispatch = useAppDispatch()
     const [open, setOpen] = React.useState(false);
     const [loginDialogOpen, setLoginDialogOpen] = React.useState(false);
-    const [setStatus, setSetStatus] = React.useState(props.status)
+    const [setStatus, setSetStatus] = React.useState(props.status);
+    const [addCommentOpen, setAddCommentOpen] = React.useState(false);
+    const [viewCommentOpen, setViewCommentOpen] = React.useState(false);
+    const [feedbackScore, setFeedbackScore] = React.useState(props.score);
 
     const [loginDialog, setLoginDialog] = React.useState(false);
+    const [voteStatus, setVoteStatus] = React.useState<null | 'UPVOTE' | 'DOWNVOTE'>(null);
+
     const handleUpvote = () => {
-        const voteType = 'UPVOTE'
-        dispatch(upvoteDownvote({ feedback_id: props.id, voteType }));
+        if (!user_Id) {
+            setLoginDialogOpen(true);
+            return;
+        }
+        if (voteStatus === 'UPVOTE') return; 
+
+        let newScore = feedbackScore;
+        if (voteStatus === 'DOWNVOTE') {
+            newScore += 2; 
+        } else {
+            newScore += 1;
+        }
+        setFeedbackScore(newScore);
+
+        setVoteStatus('UPVOTE');
+        dispatch(upvoteDownvote({ feedback_id: props.id, voteType: 'UPVOTE' }));
     };
 
     const handleDownvote = () => {
-        const voteType = 'DOWNVOTE'
-        dispatch(upvoteDownvote({ feedback_id: props.id, voteType }));
+        if (!user_Id) {
+            setLoginDialogOpen(true);
+            return;
+        }
+        if (voteStatus === 'DOWNVOTE') return; 
+
+        let newScore = feedbackScore;
+        if (voteStatus === 'UPVOTE') {
+            newScore -= 2; 
+        } else {
+            newScore -= 1;
+        }
+        setFeedbackScore(newScore);
+
+        setVoteStatus('DOWNVOTE');
+        dispatch(upvoteDownvote({ feedback_id: props.id, voteType: 'DOWNVOTE' }));
     };
+
 
     const { title, description, created_at, id, score, status, tags, user } = props
 
@@ -51,7 +87,7 @@ export default function FeedBackCard(props: FeedbackInterface) {
         if (!user_Id) {
             setLoginDialogOpen(true);
         } else {
-            // code to disply comments
+            setViewCommentOpen(true);
         }
     };
 
@@ -59,7 +95,7 @@ export default function FeedBackCard(props: FeedbackInterface) {
         if (!user_Id) {
             setLoginDialogOpen(true);
         } else {
-            // code to addcoment
+            setAddCommentOpen(true);
         }
     };
 
@@ -84,14 +120,14 @@ export default function FeedBackCard(props: FeedbackInterface) {
 
     const handleToggleStatus = async () => {
 
-        if(setStatus === 'PUBLIC'){
+        if (setStatus === 'PUBLIC') {
             setSetStatus('PRIVATE')
             // await axiosInstance.put(`/feedbacks/${id}/status`, { status: setStatus })
         }
-        else{
+        else {
             setSetStatus('PUBLIC')
         }
-        
+
 
     };
 
@@ -110,9 +146,26 @@ export default function FeedBackCard(props: FeedbackInterface) {
 
 
                                 <Stack direction={'column'} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Button onClick={handleUpvote} sx={{ padding: 0, margin: 0 }}><ExpandLessIcon fontSize='large' sx={{ fontSize: '120px' }} /></Button>
-                                    <Typography sx={{ padding: 2 }} variant="h1">{score}</Typography>
-                                    <Button onClick={handleDownvote} sx={{ padding: 0, margin: 0 }}><ExpandMoreIcon fontSize='large' sx={{ fontSize: '120px' }} /></Button>
+                                    <Button
+                                        onClick={handleUpvote}
+                                        sx={{ padding: 0, margin: 0 }}
+                                        disabled={voteStatus === 'UPVOTE'}
+                                    >
+                                        <ExpandLessIcon fontSize='large' sx={{ fontSize: '120px' }} />
+                                    </Button>
+
+                                    <Typography sx={{ padding: 2 }} variant="h1">
+                                        {feedbackScore}
+                                    </Typography>
+
+                                    <Button
+                                        onClick={handleDownvote}
+                                        sx={{ padding: 0, margin: 0 }}
+                                        disabled={voteStatus === 'DOWNVOTE'}
+                                    >
+                                        <ExpandMoreIcon fontSize='large' sx={{ fontSize: '120px' }} />
+                                    </Button>
+
                                 </Stack>
 
 
@@ -121,7 +174,7 @@ export default function FeedBackCard(props: FeedbackInterface) {
 
                             <Card sx={{ width: '100%', minWidth: '500px', bgcolor: 'background.paper', padding: 4 }}>
 
-                                {user_Id === user?.id  && (
+                                {user_Id === user?.id && (
                                     <Typography
                                         gutterBottom
                                         variant="h5"
@@ -187,6 +240,8 @@ export default function FeedBackCard(props: FeedbackInterface) {
                 </Stack>
 
             </Paper>
+            <AddComment feedbackId={id} open={addCommentOpen} onClose={() => setAddCommentOpen(false)} />
+            <ViewComment open={viewCommentOpen} onClose={() => setViewCommentOpen(false)} />
             <LoginDialog
                 open={loginDialogOpen}
                 onClose={() => setLoginDialogOpen(false)}

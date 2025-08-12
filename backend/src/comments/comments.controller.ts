@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -23,8 +23,8 @@ export class CommentsController {
   }
 
   @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  findAll(@Query('feedback_Id') feedback_Id: string   ) {
+    return this.commentsService.findAll(+feedback_Id);
   }
 
   @Get(':id')

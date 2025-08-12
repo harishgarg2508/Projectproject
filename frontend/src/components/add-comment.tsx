@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { FormControl, FormLabel, Input, Stack } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormLabel, Input, Stack, TextField } from '@mui/material';
 import { CommentSchema } from '@/app/utils';
 import { toast, Toaster } from 'sonner';
 const style = {
@@ -27,10 +27,8 @@ import { createComment } from '@/app/redux/thunks/comment.thunk';
 
 type Comment = z.infer<typeof CommentSchema>;
 
-export default function AddComment({ feedbackId }: { feedbackId: number }) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export default function AddComment({ feedbackId, open, onClose }: { feedbackId: number, open: boolean; onClose: () => void }) {
+
   const dispatch = useAppDispatch();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<Comment>({
@@ -39,45 +37,31 @@ export default function AddComment({ feedbackId }: { feedbackId: number }) {
 
   const submitData = (data: Comment) => {
     const feedback_id = Number(feedbackId);
-    console.log(data); 
+    console.log(data);
     dispatch(createComment({ ...data, feedback_id })).unwrap();
     toast.success("Comment created successfully!");
     reset();
   };
 
   return (
-    <div>
-      <Button variant='contained' onClick={handleOpen}>Add Comment</Button>
-      <Modal
-        keepMounted
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Add a Comment
-          </Typography>
-          <form onSubmit={handleSubmit(submitData)}>
-            <Stack spacing={2}>
-              <FormControl>
-                <FormLabel>Comment</FormLabel>
-                <Input
-                  autoFocus
-                  fullWidth
-                  {...register("content")}
-                  error={!!errors.content}
-                />
-                <Typography color="error" variant="caption">
-                  {errors.content?.message}
-                </Typography>
-                <Button variant='contained' size='small' type='submit' sx={{ mt: 2 }}>Add</Button>
-              </FormControl>
-            </Stack>
-          </form>
-        </Box>
-      </Modal>
-    </div>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle> Please enter your comment </DialogTitle>
+      <DialogContent>
+
+        <form onSubmit={handleSubmit(submitData)} id="login-form">
+          <TextField
+            id="outlined-multiline-flexible"
+            label="comment"
+            multiline
+            maxRows={4}
+          />
+
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button type="submit" form="login-form">Add</Button>
+      </DialogActions>
+    </Dialog>
   );
 }

@@ -26,8 +26,9 @@ export class FeedbackRepository extends Repository<Feedback> {
       .leftJoinAndSelect('tags.tag', 'tag')
       .leftJoinAndSelect('feedback.user', 'user')
       .leftJoinAndSelect('feedback.votes', 'votes')
-      .leftJoinAndSelect('feedback.comments', 'comments','comments.parent IS null');
-
+      .leftJoinAndSelect('feedback.comments', 'comments')
+      .leftJoinAndSelect('comments.children', 'children')
+      .leftJoinAndSelect('children.children','grandChildren')
     if (search) {
       query.andWhere('(feedback.title LIKE :search OR feedback.description LIKE :search)', { search: `%${search}%` });
     }
@@ -41,7 +42,7 @@ export class FeedbackRepository extends Repository<Feedback> {
       query.andWhere('user.id IN (:...authorIds)', { authorIds });
     }
     if (orderBy) {
-      query.orderBy('feedback.score', orderBy);
+      query.orderBy('feedback.score', orderBy); 
     }
     if (limit) {
       query.take(limit);
