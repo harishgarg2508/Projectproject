@@ -19,7 +19,7 @@ export class FeedbackRepository extends Repository<Feedback> {
   }
 
   async findAllFeedbacks(filters: FeedbackFilterDto) {
-    const { search, limit = LIMIT, page = PAGE, status, orderBy, tagIds, tagId ,authorIds} = filters;
+    const { search, limit = LIMIT, page = PAGE, status=Status.PUBLIC, orderBy, tagIds, tagId ,authorIds} = filters;
     const query = this.createQueryBuilder('feedback')
       .where('feedback.is_visible = :is_visible', { is_visible: true })
       .leftJoinAndSelect('feedback.tags', 'tags')

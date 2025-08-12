@@ -18,7 +18,6 @@ export class FeedbackFilterDto {
         typeof value === 'string' ? value.split(',').map((v) => parseInt(v, 10)) : value,
     )
     @IsArray()
-    // @Type(() => Number)
     tagIds?: number[];
 
 

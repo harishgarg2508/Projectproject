@@ -58,7 +58,6 @@ export interface UserState {
   name: string;
   email: string;
   error: string;
-  avatar: string;
 }
 
 export interface Credentials {

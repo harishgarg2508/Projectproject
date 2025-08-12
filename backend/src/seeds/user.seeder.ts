@@ -3,13 +3,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { Role, User } from '../user/entities/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-
-class HashingService {
-  public async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 10);
-  }
-
-}
+import { HashingService } from 'src/hashing/hashing.service';
 
 export class CategorySeeder implements Seeder {
   public async run(
@@ -22,9 +16,9 @@ export class CategorySeeder implements Seeder {
 
     const admins: CreateUserDto[] = [
       {
-        username: 'admin1',
-        email: 'admin1@gmail.com',
-        password: 'admin1',
+        username: 'admin11',
+        email: 'admin11@gmail.com',
+        password: await hashingService.hashPassword('admin1'),
         role: Role.ADMIN
       },
       {

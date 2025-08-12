@@ -45,12 +45,5 @@ export class User {
     @OneToMany(()=>Vote,(vote)=>vote.user)
     votes: Vote[]
 
-   
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-
 }
 

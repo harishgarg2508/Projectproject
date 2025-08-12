@@ -38,7 +38,6 @@ const initialState: UserState = {
   name: '',
   email: '',
   error: '',
-  avatar: '',
 };
 
 const userSlice = createSlice({
@@ -68,7 +67,6 @@ const userSlice = createSlice({
       state.userId = action.payload.userId;
       state.name = action.payload.name;
       state.email = action.payload.email;
-      state.avatar = action.payload.avatar;
       state.isLoading = false;
       state.error = '';
     });
@@ -86,7 +84,6 @@ const userSlice = createSlice({
       state.userId = action.payload.userId;
       state.name = action.payload.name;
       state.email = action.payload.email;
-      state.avatar = action.payload.avatar;
       state.isLoading = false;
       state.error = '';
     });
